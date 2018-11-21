@@ -45,7 +45,7 @@ public class ServiceInstanceInventoryRegister implements IServiceInstanceInvento
 
     private ServiceInstanceInventoryCache getServiceInstanceInventoryCache() {
         if (isNull(serviceInstanceInventoryCache)) {
-            serviceInstanceInventoryCache = moduleManager.find(CoreModule.NAME).getService(ServiceInstanceInventoryCache.class);
+            serviceInstanceInventoryCache = moduleManager.find(CoreModule.NAME).provider().getService(ServiceInstanceInventoryCache.class);
         }
         return serviceInstanceInventoryCache;
     }
@@ -107,7 +107,7 @@ public class ServiceInstanceInventoryRegister implements IServiceInstanceInvento
             serviceInstanceInventory.setHeartbeatTime(heartBeatTime);
             InventoryProcess.INSTANCE.in(serviceInstanceInventory);
         } else {
-            logger.warn("Service instance {} heartbeat, but not found in storage.");
+            logger.warn("Service instance {} heartbeat, but not found in storage.", serviceInstanceId);
         }
     }
 }
