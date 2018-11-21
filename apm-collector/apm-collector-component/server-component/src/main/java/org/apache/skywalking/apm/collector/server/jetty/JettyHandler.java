@@ -25,5 +25,8 @@ import org.apache.skywalking.apm.collector.server.ServerHandler;
  * @author peng-yongsheng
  */
 public abstract class JettyHandler extends HttpServlet implements ServerHandler {
+    /**
+     * 请求路径定义
+     */
     public abstract String pathSpec();
 }

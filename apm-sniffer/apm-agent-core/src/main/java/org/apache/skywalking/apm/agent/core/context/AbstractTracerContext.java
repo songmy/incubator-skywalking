@@ -36,6 +36,7 @@ public interface AbstractTracerContext {
     void inject(ContextCarrier carrier);
 
     /**
+     * 多线程环境下跨进程传输
      * Build the reference between this segment and a cross-process segment.
      * How to build, depends on the implementation.
      *
@@ -44,6 +45,7 @@ public interface AbstractTracerContext {
     void extract(ContextCarrier carrier);
 
     /**
+     * 跨线程
      * Capture a snapshot for cross-thread propagation.
      * It's a similar concept with ActiveSpan.Continuation in OpenTracing-java
      * How to build, depends on the implementation.

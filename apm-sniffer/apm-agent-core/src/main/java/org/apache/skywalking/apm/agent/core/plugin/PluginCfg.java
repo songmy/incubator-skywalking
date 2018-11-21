@@ -40,10 +40,10 @@ public enum PluginCfg {
     void load(InputStream input) throws IOException {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-            String pluginDefine = null;
+            String pluginDefine;
             while ((pluginDefine = reader.readLine()) != null) {
                 try {
-                    if (pluginDefine == null || pluginDefine.trim().length() == 0 || pluginDefine.startsWith("#")) {
+                    if (pluginDefine.trim().length() == 0 || pluginDefine.startsWith("#")) {
                         continue;
                     }
                     PluginDefine plugin = PluginDefine.build(pluginDefine);

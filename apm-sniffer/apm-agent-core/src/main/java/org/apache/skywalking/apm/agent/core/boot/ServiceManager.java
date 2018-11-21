@@ -85,7 +85,7 @@ public enum ServiceManager {
                     }
                 } else {
                     Class<? extends BootService> targetService = overrideImplementor.value();
-                    if (bootedServices.containsKey(targetService)) {
+                    if (bootedServices.containsKey(targetService)) {//此处解析应该有问题，看代码目的是为了确定唯一的一个实现类，此处应该是简单处理了
                         boolean presentDefault = bootedServices.get(targetService).getClass().isAnnotationPresent(DefaultImplementor.class);
                         if (presentDefault) {
                             bootedServices.put(targetService, bootService);

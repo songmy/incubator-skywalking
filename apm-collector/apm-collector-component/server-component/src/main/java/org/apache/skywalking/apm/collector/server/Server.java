@@ -23,9 +23,14 @@ package org.apache.skywalking.apm.collector.server;
  * @author peng-yongsheng, wusheng
  */
 public interface Server {
-
+    /**
+     * 获得服务器地址
+     */
     String hostPort();
 
+    /**
+     * 获得服务器分类
+     */
     String serverClassify();
 
     void initialize() throws ServerException;

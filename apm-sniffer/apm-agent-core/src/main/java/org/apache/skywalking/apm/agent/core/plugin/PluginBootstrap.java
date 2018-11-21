@@ -22,6 +22,7 @@ package org.apache.skywalking.apm.agent.core.plugin;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.skywalking.apm.agent.core.boot.AgentPackageNotFoundException;
 import org.apache.skywalking.apm.agent.core.plugin.loader.AgentClassLoader;
 import org.apache.skywalking.apm.agent.core.logging.api.ILog;
@@ -68,10 +69,7 @@ public class PluginBootstrap {
             try {
                 logger.debug("loading plugin class {}.", pluginDefine.getDefineClass());
                 AbstractClassEnhancePluginDefine plugin =
-                    (AbstractClassEnhancePluginDefine)Class.forName(pluginDefine.getDefineClass(),
-                        true,
-                        AgentClassLoader.getDefault())
-                        .newInstance();
+                        (AbstractClassEnhancePluginDefine) Class.forName(pluginDefine.getDefineClass(),true,AgentClassLoader.getDefault()).newInstance();
                 plugins.add(plugin);
             } catch (Throwable t) {
                 logger.error(t, "load plugin [{}] failure.", pluginDefine.getDefineClass());

@@ -27,6 +27,9 @@ import org.apache.skywalking.apm.collector.server.jetty.JettyServer;
  * @author peng-yongsheng
  */
 public interface JettyManagerService extends Service {
+    /**
+     * 创建 Jetty Server ，若不存在
+     */
     JettyServer createIfAbsent(String host, int port, String contextPath);
 
     void addHandler(String host, int port, JettyHandler serverHandler);

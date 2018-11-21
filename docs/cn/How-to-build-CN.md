@@ -8,6 +8,7 @@
 
 ### 从GitHub下载代码编译
 1. 准备环境: git, jdk8，Maven
+1. git config --global core.longpaths true (解决文件名称过长Filename too long)
 1. `git clone https://github.com/apache/incubator-skywalking.git`
 1. `cd incubator-skywalking/`
 1. 切换到tag `git checkout [tagname]` (可选，当需要编译发行版本时，请是切换到指定分支)
