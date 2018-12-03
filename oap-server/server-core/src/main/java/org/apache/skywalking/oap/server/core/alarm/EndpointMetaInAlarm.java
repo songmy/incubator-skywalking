@@ -16,22 +16,32 @@
  *
  */
 
-package org.apache.skywalking.oap.server.receiver.trace.provider;
+package org.apache.skywalking.oap.server.core.alarm;
 
-import lombok.*;
-import org.apache.skywalking.oap.server.library.module.ModuleConfig;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+import org.apache.skywalking.oap.server.core.source.Scope;
 
-/**
- * @author peng-yongsheng
- */
-public class TraceServiceModuleConfig extends ModuleConfig {
-    @Setter @Getter private String bufferPath;
-    @Setter @Getter private int bufferOffsetMaxFileSize;
-    @Setter @Getter private int bufferDataMaxFileSize;
-    @Setter @Getter private boolean bufferFileCleanWhenRestart;
-    /**
-     * The sample rate precision is 1/10000.
-     * 10000 means 100% sample in default.
-     */
-    @Setter @Getter private int sampleRate = 10000;
+@Getter(AccessLevel.PUBLIC)
+@Setter(AccessLevel.PUBLIC)
+public class EndpointMetaInAlarm extends MetaInAlarm {
+    private String indicatorName;
+
+    private int id;
+    private String name;
+    private String[] tags;
+    private String[] properties;
+
+    @Override public Scope getScope() {
+        return Scope.Endpoint;
+    }
+
+    @Override public int getId0() {
+        return id;
+    }
+
+    @Override public int getId1() {
+        return 0;
+    }
 }
