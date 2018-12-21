@@ -20,6 +20,7 @@
 package org.apache.skywalking.apm.agent.core.conf;
 
 import org.apache.skywalking.apm.agent.core.context.trace.TraceSegment;
+import org.apache.skywalking.apm.agent.core.dictionary.DictionaryUtil;
 import org.apache.skywalking.apm.agent.core.logging.core.LogLevel;
 import org.apache.skywalking.apm.agent.core.logging.core.WriterFactory;
 
@@ -41,6 +42,10 @@ public class Config {
          * service instance nodes share the same code
          */
         public static String SERVICE_NAME = "";
+        /**
+         * 应用服务ID
+         */
+        public  static int SERVICE_ID = DictionaryUtil.nullValue();
 
         /**
          * Authentication active is based on backend setting, see application.yml for more details.

@@ -77,6 +77,8 @@ public class H2TableInstaller extends ModelInstaller {
             ColumnName name = column.getColumnName();
             tableCreateSQL.appendLine(name.getStorageName() + " " + getColumnType(model, name, column.getType()) + (i != model.getColumns().size() - 1 ? "," : ""));
         }
+        //解决索引过长数据库不支持的问题 5.7版本赢不用 参考地址：https://www.cnblogs.com/kerrycode/p/9680881.html
+//        tableCreateSQL.appendLine(") ROW_FORMAT=DYNAMIC ");
         tableCreateSQL.appendLine(")");
 
         if (logger.isDebugEnabled()) {

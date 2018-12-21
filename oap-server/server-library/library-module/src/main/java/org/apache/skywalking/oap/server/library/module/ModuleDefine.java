@@ -60,6 +60,7 @@ public abstract class ModuleDefine implements ModuleProviderHolder {
      */
     void prepare(ModuleManager moduleManager,
         ApplicationConfiguration.ModuleConfiguration configuration) throws ProviderNotFoundException, ServiceNotProvidedException, ModuleConfigException, ModuleStartException {
+        //每次都要重新加载吗？
         ServiceLoader<ModuleProvider> moduleProviderLoader = ServiceLoader.load(ModuleProvider.class);
         boolean providerExist = false;
         for (ModuleProvider provider : moduleProviderLoader) {
