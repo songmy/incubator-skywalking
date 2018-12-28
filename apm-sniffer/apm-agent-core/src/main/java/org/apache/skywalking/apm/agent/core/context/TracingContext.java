@@ -243,6 +243,7 @@ public class TracingContext implements AbstractTracerContext {
      */
     @Override
     public AbstractSpan createEntrySpan(final String operationName) {
+        //判断是否超出span数量限制，默认300个
         if (isLimitMechanismWorking()) {
             NoopSpan span = new NoopSpan();
             return push(span);
