@@ -10,5 +10,7 @@ target/
 packages/
 **/dependency-reduced-pom.xml
 /skywalking-agent/
-/dist/
+/dist/apache-skywalking-apm-incubating/
+/dist/apache-skywalking-apm-incubating.tar.gz
+/dist/apache-skywalking-apm-incubating.zip
 /docker/snapshot/*.gz
