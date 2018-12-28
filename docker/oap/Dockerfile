@@ -17,13 +17,13 @@
 FROM openjdk:8-jre-alpine
 
 ENV DIST_NAME=apache-skywalking-apm-incubating \
-    JAVA_OPTS=" -Xms256M -Xmx512M"
+    JAVA_OPTS="$JAVA_OPTS -Xms256M -Xmx512M"
 
 # Install required packages
 RUN apk add --no-cache \
     bash
 
-COPY "$DIST_NAME.tar.gz" /
+COPY "dist/$DIST_NAME.tar.gz" /
 
 RUN set -ex; \
     tar -xzf "$DIST_NAME.tar.gz"; \
@@ -32,8 +32,8 @@ RUN set -ex; \
 
 WORKDIR $DIST_NAME
 
-COPY log4j2.xml config/
-COPY docker-entrypoint.sh .
+COPY docker/oap/log4j2.xml config/
+COPY docker/oap/docker-entrypoint.sh .
 
 EXPOSE 12800 11800
 
