@@ -14,16 +14,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM openjdk:8-jre-alpine
+FROM registry.cmcc.com/neunn:8-jre-alpine
 
 ENV DIST_NAME=apache-skywalking-apm-incubating \
-    JAVA_OPTS=" -Xms256M -Xmx512M"
+    JAVA_OPTS="$JAVA_OPTS -Xms256M -Xmx512M"
 
 # Install required packages
 RUN apk add --no-cache \
     bash
 
-COPY "$DIST_NAME.tar.gz" /
+COPY "dist/$DIST_NAME.tar.gz" /
 
 RUN set -ex; \
     tar -xzf "$DIST_NAME.tar.gz"; \
@@ -32,9 +32,9 @@ RUN set -ex; \
 
 WORKDIR $DIST_NAME
 
-COPY docker-entrypoint.sh .
-COPY logback.xml webapp/
+COPY docker/ui/docker-entrypoint.sh .
+COPY docker/ui/logback.xml webapp/
 
 EXPOSE 8080
-
+RUN user add app-user;chown app-user:app-user $DIST_NAME;su app-user
 ENTRYPOINT ["sh", "docker-entrypoint.sh"]
