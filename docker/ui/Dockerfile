@@ -16,8 +16,8 @@
 
 FROM registry.cmcc.com/neunn:8-jre-alpine
 
-ENV DIST_NAME=apache-skywalking-apm-incubating \
-    JAVA_OPTS="$JAVA_OPTS -Xms256M -Xmx512M"
+ENV DIST_NAME=apache-skywalking-apm-incubating
+ENV JAVA_OPTS="$JAVA_OPTS -Xms256M -Xmx512M"
 
 # Install required packages
 RUN apk add --no-cache \
@@ -36,5 +36,5 @@ COPY docker/ui/docker-entrypoint.sh .
 COPY docker/ui/logback.xml webapp/
 
 EXPOSE 8080
-RUN user add app-user;chown app-user:app-user $DIST_NAME;su app-user
+#RUN user add app-user;chown app-user:app-user $DIST_NAME;su app-user
 ENTRYPOINT ["sh", "docker-entrypoint.sh"]

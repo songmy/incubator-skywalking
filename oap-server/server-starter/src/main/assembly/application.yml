@@ -51,7 +51,7 @@ core:
     dayMetricsDataTTL: ${SW_CORE_DAY_METRIC_DATA_TTL:30} # Unit is day 暂时修改为一个月
     monthMetricsDataTTL: ${SW_CORE_MONTH_METRIC_DATA_TTL:24} # Unit is month 暂时修改为2年
 storage:
-  h2:
+#  h2:
 #    driver: ${SW_STORAGE_H2_DRIVER:org.h2.jdbcx.JdbcDataSource}
 #    url: ${SW_STORAGE_H2_URL:jdbc:h2:mem:skywalking-oap-db}
 #    user: ${SW_STORAGE_H2_USER:sa}
