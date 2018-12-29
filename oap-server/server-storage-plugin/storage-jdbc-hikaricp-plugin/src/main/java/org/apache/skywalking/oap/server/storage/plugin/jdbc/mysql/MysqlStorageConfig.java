@@ -32,8 +32,8 @@ public class MysqlStorageConfig extends ModuleConfig {
         properties.setProperty("dataSource.user", this.getUser());
         properties.setProperty("dataSource.password", this.getPassword());
         properties.setProperty("dataSource.cachePrepStmts", this.isCachePrepStmts() + "");
-        properties.setProperty("dataSource.prepStmtCacheSize", this.getPrepStmtCacheSize()+"");
-        properties.setProperty("dataSource.prepStmtCacheSqlLimit", this.getPrepStmtCacheSqlLimit()+"");
+        properties.setProperty("dataSource.prepStmtCacheSize", this.getPrepStmtCacheSize() + "");
+        properties.setProperty("dataSource.prepStmtCacheSqlLimit", this.getPrepStmtCacheSqlLimit() + "");
         properties.setProperty("dataSource.useServerPrepStmts", this.isUseServerPrepStmts() + "");
         properties.setProperty("dataSource.useLocalSessionState", this.isUseLocalSessionState() + "");
         properties.setProperty("dataSource.rewriteBatchedStatements", this.isRewriteBatchedStatements() + "");
