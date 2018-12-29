@@ -18,11 +18,8 @@
 
 package org.apache.skywalking.oap.server.starter.config;
 
-import java.io.FileNotFoundException;
-import java.io.Reader;
-import java.util.Map;
-import java.util.Properties;
 import org.apache.skywalking.apm.util.PropertyPlaceholderHelper;
+import org.apache.skywalking.apm.util.StringUtil;
 import org.apache.skywalking.oap.server.library.module.ApplicationConfiguration;
 import org.apache.skywalking.oap.server.library.util.CollectionUtils;
 import org.apache.skywalking.oap.server.library.util.ResourceUtils;
@@ -30,10 +27,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
 
+import java.io.*;
+import java.util.Map;
+import java.util.Properties;
+
 /**
  * Initialize collector settings with following sources. Use application.yml as primary setting, and fix missing setting
  * by default settings in application-default.yml.
- *
+ * <p>
  * At last, override setting by system.properties and system.envs if the key matches moduleName.provideName.settingKey.
  *
  * @author peng-yongsheng, wusheng
@@ -41,10 +42,11 @@ import org.yaml.snakeyaml.Yaml;
 public class ApplicationConfigLoader implements ConfigLoader<ApplicationConfiguration> {
 
     private static final Logger logger = LoggerFactory.getLogger(ApplicationConfigLoader.class);
-
+    private static final String SPECIFIED_CONFIG_PATH = "skywalking_oap_config";
     private final Yaml yaml = new Yaml();
 
-    @Override public ApplicationConfiguration load() throws ConfigFileNotFoundException {
+    @Override
+    public ApplicationConfiguration load() throws ConfigFileNotFoundException {
         ApplicationConfiguration configuration = new ApplicationConfiguration();
         this.loadConfig(configuration);
         this.overrideConfigBySystemEnv(configuration);
@@ -54,7 +56,20 @@ public class ApplicationConfigLoader implements ConfigLoader<ApplicationConfigur
     @SuppressWarnings("unchecked")
     private void loadConfig(ApplicationConfiguration configuration) throws ConfigFileNotFoundException {
         try {
-            Reader applicationReader = ResourceUtils.read("application.yml");
+            String specifiedConfigPath = System.getProperties().getProperty(SPECIFIED_CONFIG_PATH);
+            Reader applicationReader = null;
+            if (!StringUtil.isEmpty(specifiedConfigPath)) {
+                File configFile = new File(specifiedConfigPath);
+                if (configFile.exists() && configFile.isFile()) {
+                    try {
+                        applicationReader = new InputStreamReader(new FileInputStream(configFile), "UTF-8");
+                    } catch (UnsupportedEncodingException e) {
+                        throw new ConfigFileNotFoundException("Fail to load agent.config UnsupportedEncodingException", e);
+                    }
+                }
+            }
+            if (applicationReader == null)
+                applicationReader = ResourceUtils.read("application.yml");
             Map<String, Map<String, Map<String, ?>>> moduleConfig = yaml.loadAs(applicationReader, Map.class);
             if (CollectionUtils.isNotEmpty(moduleConfig)) {
                 moduleConfig.forEach((moduleName, providerConfig) -> {
@@ -68,7 +83,7 @@ public class ApplicationConfigLoader implements ConfigLoader<ApplicationConfigur
                                 propertiesConfig.forEach((key, value) -> {
                                     properties.put(key, value);
                                     final Object replaceValue = yaml.load(PropertyPlaceholderHelper.INSTANCE
-                                        .replacePlaceholders(value + "", properties));
+                                            .replacePlaceholders(value + "", properties));
                                     properties.replace(key, replaceValue);
                                     logger.info("The property with key: {}, value: {}, in {} provider", key, replaceValue.toString(), name);
                                 });
@@ -130,6 +145,6 @@ public class ApplicationConfigLoader implements ConfigLoader<ApplicationConfigur
         }
 
         logger.info("The setting has been override by key: {}, value: {}, in {} provider of {} module through {}",
-            settingKey, value, providerName, moduleName, "System.properties");
+                settingKey, value, providerName, moduleName, "System.properties");
     }
 }

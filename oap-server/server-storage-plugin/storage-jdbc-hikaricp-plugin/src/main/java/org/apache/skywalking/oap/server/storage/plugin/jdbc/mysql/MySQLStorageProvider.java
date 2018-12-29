@@ -20,6 +20,7 @@ package org.apache.skywalking.oap.server.storage.plugin.jdbc.mysql;
 
 import java.io.IOException;
 import java.util.Properties;
+
 import org.apache.skywalking.oap.server.core.storage.IBatchDAO;
 import org.apache.skywalking.oap.server.core.storage.IHistoryDeleteDAO;
 import org.apache.skywalking.oap.server.core.storage.IRegisterLockDAO;
@@ -61,7 +62,7 @@ import org.slf4j.LoggerFactory;
 /**
  * MySQL storage provider should be secondary choice for production usage as SkyWalking storage solution. It enhanced
  * and came from H2StorageProvider, but consider more in using in production.
- *
+ * <p>
  * Because this module is not really related to MySQL, instead, it is based on MySQL SQL style with JDBC, so, by having
  * this storage implementation, we could also use this in MySQL-compatible projects, such as, Apache ShardingSphere,
  * TiDB
@@ -71,35 +72,39 @@ import org.slf4j.LoggerFactory;
 public class MySQLStorageProvider extends ModuleProvider {
     private static final Logger logger = LoggerFactory.getLogger(H2StorageProvider.class);
 
-    private H2StorageConfig config;
+    private MysqlStorageConfig config;
     private JDBCHikariCPClient mysqlClient;
     private MySQLRegisterTableLockDAO lockDAO;
 
     public MySQLStorageProvider() {
-        config = new H2StorageConfig();
+        config = new MysqlStorageConfig();
     }
 
-    @Override public String name() {
+    @Override
+    public String name() {
         return "mysql";
     }
 
-    @Override public Class<? extends ModuleDefine> module() {
+    @Override
+    public Class<? extends ModuleDefine> module() {
         return StorageModule.class;
     }
 
-    @Override public ModuleConfig createConfigBeanIfAbsent() {
+    @Override
+    public ModuleConfig createConfigBeanIfAbsent() {
         return config;
     }
 
-    @Override public void prepare() throws ServiceNotProvidedException, ModuleStartException {
-        Properties settings = new Properties();
-        try {
-            settings.load(ResourceUtils.read("datasource-settings.properties"));
-        } catch (IOException e) {
-            throw new ModuleStartException("load datasource setting file failure.", e);
-        }
+    @Override
+    public void prepare() throws ServiceNotProvidedException, ModuleStartException {
+//        Properties settings = new Properties();
+//        try {
+//            settings.load(ResourceUtils.read("datasource-settings.properties"));
+//        } catch (IOException e) {
+//            throw new ModuleStartException("load datasource setting file failure.", e);
+//        }
 
-        mysqlClient = new JDBCHikariCPClient(settings);
+        mysqlClient = new JDBCHikariCPClient(config.properties());
 
         this.registerServiceImplementation(IBatchDAO.class, new H2BatchDAO(mysqlClient));
         this.registerServiceImplementation(StorageDAO.class, new H2StorageDAO(mysqlClient));
@@ -120,7 +125,8 @@ public class MySQLStorageProvider extends ModuleProvider {
         this.registerServiceImplementation(IHistoryDeleteDAO.class, new H2HistoryDeleteDAO(mysqlClient));
     }
 
-    @Override public void start() throws ServiceNotProvidedException, ModuleStartException {
+    @Override
+    public void start() throws ServiceNotProvidedException, ModuleStartException {
         try {
             mysqlClient.connect();
 
@@ -133,11 +139,13 @@ public class MySQLStorageProvider extends ModuleProvider {
         }
     }
 
-    @Override public void notifyAfterCompleted() throws ServiceNotProvidedException, ModuleStartException {
+    @Override
+    public void notifyAfterCompleted() throws ServiceNotProvidedException, ModuleStartException {
 
     }
 
-    @Override public String[] requiredModules() {
+    @Override
+    public String[] requiredModules() {
         return new String[0];
     }
 }
