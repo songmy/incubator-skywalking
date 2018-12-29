@@ -66,6 +66,19 @@ storage:
 #    flushInterval: ${SW_STORAGE_ES_FLUSH_INTERVAL:10} # flush the bulk every 10 seconds whatever the number of requests
 #    concurrentRequests: ${SW_STORAGE_ES_CONCURRENT_REQUESTS:2} # the number of concurrent requests
   mysql:
+    jdbcUrl: ${SW_STORAGE_MYSQL_DRIVER:jdbc:mysql://localhost:3306/swtest}
+    user: ${SW_STORAGE_MYSQL_USER:root}
+    password: ${SW_STORAGE_MYSQL_PASSWORD:root}
+    cachePrepStmts: ${SW_STORAGE_MYSQL_CACHEPREPSTMTS:true}
+    prepStmtCacheSize: ${SW_STORAGE_MYSQL_PREPSTMTCACHESIZE:250}
+    prepStmtCacheSqlLimit: ${SW_STORAGE_MYSQL_PREPSTMTCACHESQLLIMIT:2480}
+    useServerPrepStmts: ${SW_STORAGE_MYSQL_USESERVERPREPSTMTS:true}
+    useLocalSessionState: ${SW_STORAGE_MYSQL_USELOCALSESSIONSTATE:true}
+    rewriteBatchedStatements: ${SW_STORAGE_MYSQL_REWRITEBATCHEDSTATEMENTS:true}
+    cacheResultSetMetadata: ${SW_STORAGE_MYSQL_CACHERESULTSETMETADATA:true}
+    cacheServerConfiguration: ${SW_STORAGE_MYSQL_CACHESERVERCONFIGURATION:true}
+    elideSetAutoCommits: ${SW_STORAGE_MYSQL_ELIDESETAUTOCOMMITS:true}
+    maintainTimeStats: ${SW_STORAGE_MYSQL_MAINTAINTIMESTATS:false}
 receiver-register:
   default:
 receiver-trace:
