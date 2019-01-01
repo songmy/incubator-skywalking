@@ -10,7 +10,8 @@ public class ExporterSegmentDispatcher implements SourceDispatcher<EndpointRelat
 
     @Override
     public void dispatch(EndpointRelation source) {
-        CounterMetricService.INSTANCE.increase(source);
+        CounterMetricService.INSTANCE.metric(source);
         GaugeMetricService.INSTANCE.metric(source);
+        HistogramMetricService.INSTANCE.metric(source);
     }
 }

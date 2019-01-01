@@ -1,7 +1,6 @@
 package org.apache.skywalking.oap.server.prometheus.metric;
 
 import io.prometheus.client.Counter;
-import io.prometheus.client.SimpleCollector;
 import org.apache.skywalking.oap.server.core.source.EndpointRelation;
 
 /**
@@ -23,23 +22,17 @@ public enum CounterMetricService {
             "destServiceInstanceName",
             "destEndpointId",
             "destEndpointName",
-            "componentId",
-            "latency",
-            "status",
-            "responseCode",
-            "requestType",
-            "timeBucket"
+            "componentId"
     };
     private static final Counter COUNTER = Counter.build().name("neunn_paas_sw_request_counter").help("调用次数统计")
             .labelNames(segmentLabelNames).register();
 
-    public void increase(EndpointRelation endpointRelation) {
-        COUNTER.inc();
-        this.labels(COUNTER, endpointRelation).inc();
+    public void metric(EndpointRelation endpointRelation) {
+        COUNTER.labels(this.labels(endpointRelation)).inc();
     }
 
-    public <T extends SimpleCollector> T labels(T collector, EndpointRelation endpointRelation) {
-        collector.labels(
+    public String[] labels(EndpointRelation endpointRelation) {
+        return new String[]{
                 endpointRelation.getServiceId() + "",
                 endpointRelation.getServiceName(),
                 endpointRelation.getServiceInstanceId() + "",
@@ -52,13 +45,8 @@ public enum CounterMetricService {
                 endpointRelation.getChildServiceInstanceName(),
                 endpointRelation.getChildEndpointId() + "",
                 endpointRelation.getChildEndpoint(),
-                endpointRelation.getComponentId() + "",
-                endpointRelation.getRpcLatency() + "",
-                endpointRelation.isStatus() + "",
-                endpointRelation.getResponseCode() + "",
-                endpointRelation.getType().name(),
-                endpointRelation.getTimeBucket() + ""
-        );
-        return collector;
+                endpointRelation.getComponentId() + ""
+        };
     }
+
 }
