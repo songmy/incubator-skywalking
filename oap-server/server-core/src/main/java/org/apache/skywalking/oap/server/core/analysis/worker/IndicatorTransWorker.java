@@ -57,7 +57,7 @@ public class IndicatorTransWorker extends AbstractWorker<Indicator> {
         if (Objects.nonNull(monthPersistenceWorker)) {
             monthPersistenceWorker.in(indicator.toMonth());
         }
-        /**
+        /*
          * Minute persistent must be at the end of all time dimensionalities
          * Because #toHour, #toDay, #toMonth include clone inside, which could avoid concurrency situation.
          */

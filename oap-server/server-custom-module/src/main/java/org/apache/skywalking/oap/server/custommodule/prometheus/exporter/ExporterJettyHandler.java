@@ -1,4 +1,4 @@
-package org.apache.skywalking.oap.server.prometheus.provider;
+package org.apache.skywalking.oap.server.custommodule.prometheus.exporter;
 
 import io.prometheus.client.CollectorRegistry;
 import io.prometheus.client.exporter.common.TextFormat;

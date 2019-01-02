@@ -23,6 +23,7 @@ import java.lang.reflect.Field;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+
 import lombok.Getter;
 import org.apache.skywalking.oap.server.core.analysis.indicator.annotation.IndicatorAnnotationUtils;
 import org.apache.skywalking.oap.server.core.annotation.AnnotationListener;
@@ -42,17 +43,20 @@ public class StorageAnnotationListener implements AnnotationListener, IModelGett
 
     private static final Logger logger = LoggerFactory.getLogger(StorageAnnotationListener.class);
 
-    @Getter private final List<Model> models;
+    @Getter
+    private final List<Model> models;
 
     public StorageAnnotationListener() {
         this.models = new LinkedList<>();
     }
 
-    @Override public Class<? extends Annotation> annotation() {
+    @Override
+    public Class<? extends Annotation> annotation() {
         return StorageEntity.class;
     }
 
-    @Override public void notify(Class aClass) {
+    @Override
+    public void notify(Class aClass) {
         logger.info("The owner class of storage annotation, class name: {}", aClass.getName());
 
         String modelName = StorageEntityAnnotationUtils.getModelName(aClass);
@@ -86,16 +90,15 @@ public class StorageAnnotationListener implements AnnotationListener, IModelGett
         }
     }
 
-    @Override public void overrideColumnName(String columnName, String newName) {
-        models.forEach(model -> {
-            model.getColumns().forEach(column -> {
-                ColumnName existColumnName = column.getColumnName();
-                String name = existColumnName.getName();
-                if (name.equals(columnName)) {
-                    existColumnName.setStorageName(newName);
-                    logger.debug("Model {} column {} has been override. The new column name is {}.", model.getName(), name, newName);
-                }
-            });
-        });
+    @Override
+    public void overrideColumnName(String columnName, String newName) {
+        models.forEach(model -> model.getColumns().forEach(column -> {
+            ColumnName existColumnName = column.getColumnName();
+            String name = existColumnName.getName();
+            if (name.equals(columnName)) {
+                existColumnName.setStorageName(newName);
+                logger.debug("Model {} column {} has been override. The new column name is {}.", model.getName(), name, newName);
+            }
+        }));
     }
 }

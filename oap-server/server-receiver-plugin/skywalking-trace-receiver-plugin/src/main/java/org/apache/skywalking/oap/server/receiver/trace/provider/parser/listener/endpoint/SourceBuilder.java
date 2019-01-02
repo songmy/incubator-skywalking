@@ -41,6 +41,7 @@ class SourceBuilder {
     @Getter @Setter private String destEndpointName;
     @Getter @Setter private int componentId;
     @Getter @Setter private int latency;
+    //true 成功，false 失败
     @Getter @Setter private boolean status;
     @Getter @Setter private int responseCode;
     @Getter @Setter private RequestType type;

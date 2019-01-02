@@ -77,9 +77,14 @@ public class H2TableInstaller extends ModelInstaller {
             ColumnName name = column.getColumnName();
             tableCreateSQL.appendLine(name.getStorageName() + " " + getColumnType(model, name, column.getType()) + (i != model.getColumns().size() - 1 ? "," : ""));
         }
-        //解决索引过长数据库不支持的问题 5.7版本赢不用 参考地址：https://www.cnblogs.com/kerrycode/p/9680881.html
-//        tableCreateSQL.appendLine(") ROW_FORMAT=DYNAMIC ");
-        tableCreateSQL.appendLine(")");
+        //解决索引过长数据库不支持的问题 5.7及以后版本不用 参考地址：https://www.cnblogs.com/kerrycode/p/9680881.html
+//        1： 系统变量innodb_large_prefix为ON
+//            set global innodb_large_prefix=on;
+//        2： 系统变量innodb_file_format为Barracuda
+//             set global innodb_file_format=Barracuda;
+//        3： ROW_FORMAT为DYNAMIC或COMPRESSED
+        tableCreateSQL.appendLine(") ROW_FORMAT=DYNAMIC ");
+//        tableCreateSQL.appendLine(")");
 
         if (logger.isDebugEnabled()) {
             logger.debug("creating table: " + tableCreateSQL.toStringInNewLine());

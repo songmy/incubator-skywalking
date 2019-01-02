@@ -20,6 +20,7 @@ package org.apache.skywalking.oap.server.receiver.trace.provider.parser.listener
 
 import java.util.LinkedList;
 import java.util.List;
+
 import org.apache.skywalking.apm.network.language.agent.SpanLayer;
 import org.apache.skywalking.oap.server.core.Const;
 import org.apache.skywalking.oap.server.core.CoreModule;
@@ -45,9 +46,9 @@ import static java.util.Objects.nonNull;
 
 /**
  * Notice, in here, there are following concepts match
- *
+ * <p>
  * v5        |   v6
- *
+ * <p>
  * 1. Application == Service 2. Server == Service Instance 3. Service == Endpoint
  *
  * @author peng-yongsheng, wusheng
@@ -75,7 +76,8 @@ public class MultiScopesSpanListener implements EntrySpanListener, ExitSpanListe
         this.endpointInventoryCache = moduleManager.find(CoreModule.NAME).provider().getService(EndpointInventoryCache.class);
     }
 
-    @Override public boolean containsPoint(Point point) {
+    @Override
+    public boolean containsPoint(Point point) {
         return Point.Entry.equals(point) || Point.Exit.equals(point);
     }
 
@@ -123,7 +125,8 @@ public class MultiScopesSpanListener implements EntrySpanListener, ExitSpanListe
         this.entrySpanDecorator = spanDecorator;
     }
 
-    @Override public void parseExit(SpanDecorator spanDecorator, SegmentCoreInfo segmentCoreInfo) {
+    @Override
+    public void parseExit(SpanDecorator spanDecorator, SegmentCoreInfo segmentCoreInfo) {
         if (this.minuteTimeBucket == 0) {
             this.minuteTimeBucket = segmentCoreInfo.getMinuteTimeBucket();
         }
@@ -156,7 +159,7 @@ public class MultiScopesSpanListener implements EntrySpanListener, ExitSpanListe
 
     private void setPublicAttrs(SourceBuilder sourceBuilder, SpanDecorator spanDecorator) {
         long latency = spanDecorator.getEndTime() - spanDecorator.getStartTime();
-        sourceBuilder.setLatency((int)latency);
+        sourceBuilder.setLatency((int) latency);
         sourceBuilder.setResponseCode(Const.NONE);
         sourceBuilder.setStatus(!spanDecorator.getIsError());
 
@@ -180,7 +183,8 @@ public class MultiScopesSpanListener implements EntrySpanListener, ExitSpanListe
         sourceBuilder.setDestEndpointName(endpointInventoryCache.get(sourceBuilder.getDestEndpointId()).getName());
     }
 
-    @Override public void build() {
+    @Override
+    public void build() {
         entrySourceBuilders.forEach(entrySourceBuilder -> {
             entrySourceBuilder.setTimeBucket(minuteTimeBucket);
             sourceReceiver.receive(entrySourceBuilder.toAll());
@@ -190,7 +194,7 @@ public class MultiScopesSpanListener implements EntrySpanListener, ExitSpanListe
             sourceReceiver.receive(entrySourceBuilder.toServiceRelation());
             sourceReceiver.receive(entrySourceBuilder.toServiceInstanceRelation());
             EndpointRelation endpointRelation = entrySourceBuilder.toEndpointRelation();
-            /**
+            /*
              * Parent endpoint could be none, because in SkyWalking Cross Process Propagation Headers Protocol v2,
              * endpoint in ref could be empty, based on that, endpoint relation maybe can't be established.
              * So, I am making this source as optional.
@@ -216,7 +220,8 @@ public class MultiScopesSpanListener implements EntrySpanListener, ExitSpanListe
 
     public static class Factory implements SpanListenerFactory {
 
-        @Override public SpanListener create(ModuleManager moduleManager) {
+        @Override
+        public SpanListener create(ModuleManager moduleManager) {
             return new MultiScopesSpanListener(moduleManager);
         }
     }

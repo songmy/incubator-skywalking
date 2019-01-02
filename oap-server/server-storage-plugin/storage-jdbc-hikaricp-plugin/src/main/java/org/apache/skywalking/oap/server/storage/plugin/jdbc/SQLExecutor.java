@@ -48,7 +48,7 @@ public class SQLExecutor {
             preparedStatement.setObject(i + 1, param.get(i));
         }
 
-        logger.debug("execute aql in batch: {}", sql);
+        logger.debug("execute sql in batch: {}", sql);
         preparedStatement.execute();
     }
 }

@@ -27,6 +27,7 @@ import org.apache.skywalking.oap.server.core.storage.query.*;
 import org.apache.skywalking.oap.server.library.client.jdbc.hikaricp.JDBCHikariCPClient;
 import org.apache.skywalking.oap.server.library.module.*;
 import org.apache.skywalking.oap.server.storage.plugin.jdbc.h2.H2StorageProvider;
+import org.apache.skywalking.oap.server.storage.plugin.jdbc.h2.StorageH2ClientServiceImpl;
 import org.apache.skywalking.oap.server.storage.plugin.jdbc.h2.dao.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,6 +79,7 @@ public class MySQLStorageProvider extends ModuleProvider {
 
         mysqlClient = new JDBCHikariCPClient(config.properties());
 
+        this.registerServiceImplementation(IStorageClientService.class, new StorageH2ClientServiceImpl(mysqlClient));
         this.registerServiceImplementation(IBatchDAO.class, new H2BatchDAO(mysqlClient));
         this.registerServiceImplementation(StorageDAO.class, new H2StorageDAO(mysqlClient));
         lockDAO = new MySQLRegisterTableLockDAO(mysqlClient);

@@ -121,7 +121,7 @@
 
         <dependency>
             <groupId>org.apache.skywalking</groupId>
-            <artifactId>server-prometheus</artifactId>
+            <artifactId>server-custom-module</artifactId>
             <version>${project.version}</version>
         </dependency>
 

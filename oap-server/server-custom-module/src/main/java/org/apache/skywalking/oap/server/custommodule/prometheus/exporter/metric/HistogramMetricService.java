@@ -1,4 +1,4 @@
-package org.apache.skywalking.oap.server.prometheus.metric;
+package org.apache.skywalking.oap.server.custommodule.prometheus.exporter.metric;
 
 import io.prometheus.client.Histogram;
 import org.apache.skywalking.oap.server.core.source.EndpointRelation;
