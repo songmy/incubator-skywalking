@@ -46,6 +46,7 @@ public class H2StorageProvider extends ModuleProvider {
 
     private H2StorageConfig config;
     private JDBCHikariCPClient h2Client;
+    public static final String PROVDER_NAME = "h2";
 
     public H2StorageProvider() {
         config = new H2StorageConfig();
@@ -53,7 +54,7 @@ public class H2StorageProvider extends ModuleProvider {
 
     @Override
     public String name() {
-        return "h2";
+        return PROVDER_NAME;
     }
 
     @Override

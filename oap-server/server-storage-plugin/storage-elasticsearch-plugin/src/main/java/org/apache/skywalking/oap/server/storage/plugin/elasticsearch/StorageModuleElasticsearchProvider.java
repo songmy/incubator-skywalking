@@ -46,6 +46,7 @@ import org.slf4j.LoggerFactory;
 public class StorageModuleElasticsearchProvider extends ModuleProvider {
 
     private static final Logger logger = LoggerFactory.getLogger(StorageModuleElasticsearchProvider.class);
+    public static final String PROVDER_NAME = "elasticsearch";
 
     private final StorageModuleElasticsearchConfig config;
     private ElasticSearchClient elasticSearchClient;
@@ -57,7 +58,7 @@ public class StorageModuleElasticsearchProvider extends ModuleProvider {
 
     @Override
     public String name() {
-        return "elasticsearch";
+        return PROVDER_NAME;
     }
 
     @Override

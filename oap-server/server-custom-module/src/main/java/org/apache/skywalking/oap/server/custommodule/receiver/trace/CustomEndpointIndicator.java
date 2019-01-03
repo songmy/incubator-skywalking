@@ -21,8 +21,10 @@ import java.util.Map;
  */
 @IndicatorType
 @StreamData
-@StorageEntity(name = "custom_endpoint_indicator", builder = CustomEndpointIndicator.Builder.class, source = Scope.Endpoint)
+@StorageEntity(name = CustomEndpointIndicator.INDEX_NAME, builder = CustomEndpointIndicator.Builder.class, source = Scope.Endpoint)
 public class CustomEndpointIndicator extends CustomAggregationIndicator {
+
+    public static final String INDEX_NAME = "custom_endpoint_indicator";
 
     @Setter
     @Getter

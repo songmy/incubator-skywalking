@@ -11,17 +11,19 @@ import org.apache.skywalking.oap.server.core.storage.annotation.Column;
 public abstract class CustomAggregationIndicator extends Indicator {
 
     //调用次数
-    protected static final String TOTAL = "total";
+    public static final String TOTAL = "total";
     //error次数
-    protected static final String ERROR = "error";
+    public static final String ERROR = "error";
     //响应时间 ，总的加起来
-    protected static final String SUMMATION = "summation";
+    public static final String SUMMATION = "summation";
     //错误率  error/total*10000
-    protected static final String ERROR_RATE = "error_rate";
+    public static final String ERROR_RATE = "error_rate";
     //平均调用次数
-    protected static final String CALL_AVG = "call_avg";
+    public static final String CALL_AVG = "call_avg";
     //平均响应时间
-    protected static final String CALL_AVG_LATENCY = "call_avg_latency";
+    public static final String CALL_AVG_LATENCY = "call_avg_latency";
+    //最近错误出现时间
+    public static final String CALL_LATEST_ERROR_TIME_BUCKET = "latest_error_time_bucket";
 
 
     @Getter
@@ -49,11 +51,18 @@ public abstract class CustomAggregationIndicator extends Indicator {
     @Column(columnName = ERROR)
     private long error;
 
-    public final void combine(long count, long summation, boolean success) {
+    @Getter
+    @Setter
+    @Column(columnName = CALL_LATEST_ERROR_TIME_BUCKET)
+    private long latestErrorTimeBucket;
+
+    public final void combine(long count, long summation, boolean success, long timeBucket) {
         this.total += count;
         this.summation += summation;
-        if (!success)
+        if (!success) {
+            this.latestErrorTimeBucket = timeBucket;
             this.error++;
+        }
     }
 
     @Override
@@ -62,6 +71,8 @@ public abstract class CustomAggregationIndicator extends Indicator {
         this.total += countIndicator.total;
         this.summation += countIndicator.summation;
         this.error += countIndicator.error;
+        if (this.latestErrorTimeBucket < countIndicator.latestErrorTimeBucket)
+            this.latestErrorTimeBucket = countIndicator.latestErrorTimeBucket;
     }
 
     @Override

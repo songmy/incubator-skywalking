@@ -48,6 +48,7 @@ public class MySQLStorageProvider extends ModuleProvider {
     private MysqlStorageConfig config;
     private JDBCHikariCPClient mysqlClient;
     private MySQLRegisterTableLockDAO lockDAO;
+    public static final String PROVDER_NAME = "mysql";
 
     public MySQLStorageProvider() {
         config = new MysqlStorageConfig();
@@ -55,7 +56,7 @@ public class MySQLStorageProvider extends ModuleProvider {
 
     @Override
     public String name() {
-        return "mysql";
+        return PROVDER_NAME;
     }
 
     @Override

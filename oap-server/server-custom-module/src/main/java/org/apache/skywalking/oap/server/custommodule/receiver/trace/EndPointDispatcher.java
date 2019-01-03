@@ -20,7 +20,7 @@ public class EndPointDispatcher implements SourceDispatcher<Endpoint> {
         indicator.setServiceId(source.getServiceId());
         indicator.setServiceInstanceId(source.getServiceInstanceId());
         indicator.setTimeBucket(source.getTimeBucket());
-        indicator.combine(1,source.getLatency(),source.isStatus());
+        indicator.combine(1, source.getLatency(), source.isStatus(), indicator.getLatestErrorTimeBucket());
         IndicatorProcess.INSTANCE.in(indicator);
     }
 }
