@@ -13,9 +13,11 @@ public class MemoryInstanceDispatcher implements SourceDispatcher<ServiceInstanc
     @Override
     public void dispatch(ServiceInstanceJVMMemory source) {
         if (source.isHeapStatus()) {
-            HeapMemoryGaugeService.INSTANCE.metric(source);
+            HeapMemoryGaugeService.INSTANCEVALUE.metricValue(source);
+            HeapMemoryGaugeService.INSTANCEFREE.metricFree(source);
         } else {
-            NoHeapMemoryGaugeService.INSTANCE.metric(source);
+            NoHeapMemoryGaugeService.INSTANCEVALUE.metricValue(source);
+            NoHeapMemoryGaugeService.INSTANCEFREE.metricFree(source);
         }
 
     }

@@ -20,18 +20,10 @@ public enum YoungGCGaugeService {
     }
 
     private String[] labels(ServiceInstanceJVMGC serviceInstanceJVMGC) {
-        return new String[]{
-                serviceInstanceJVMGC.getServiceInstanceId() + "",
-                serviceInstanceJVMGC.getServiceName(),
-                serviceInstanceJVMGC.getName(),
-        };
+        return JVMServiceUtil.labels(serviceInstanceJVMGC.getEntityId());
     }
 
     private String[] getLabelsNames() {
-        return new String[]{
-                "serviceInstanceId",
-                "serviceName",
-                "name"
-        };
+        return JVMServiceUtil.labelsNames();
     }
 }
