@@ -2,6 +2,7 @@ package org.apache.skywalking.oap.server.custommodule.prometheus.exporter.jvm;
 
 import io.prometheus.client.Gauge;
 import org.apache.skywalking.oap.server.core.source.ServiceInstanceJVMCPU;
+import org.apache.skywalking.oap.server.core.source.Source;
 
 /**
  * @program: apm
@@ -19,19 +20,11 @@ public enum CPUGaugeService {
         GAUGE.labels(CPUGaugeService.INSTANCE.labels(serviceInstanceJVMCPU)).set(serviceInstanceJVMCPU.getUsePercent());
     }
 
-    private String[] labels(ServiceInstanceJVMCPU serviceInstanceJVMCPU) {
-        return new String[]{
-                serviceInstanceJVMCPU.getServiceInstanceId() + "",
-                serviceInstanceJVMCPU.getServiceName(),
-                serviceInstanceJVMCPU.getName()
-        };
+    private String[] labels(Source serviceInstanceJVMCPU) {
+        return JVMServiceUtil.labels(serviceInstanceJVMCPU.getEntityId());
     }
 
     private String[] getLabelsNames() {
-        return new String[]{
-                "serviceInstanceId",
-                "serviceName",
-                "name"
-        };
+        return JVMServiceUtil.labelsNames();
     }
 }

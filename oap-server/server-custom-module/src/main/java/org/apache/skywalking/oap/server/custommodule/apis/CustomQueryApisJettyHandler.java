@@ -12,6 +12,7 @@ import org.apache.skywalking.oap.server.core.cache.EndpointInventoryCache;
 import org.apache.skywalking.oap.server.core.cache.ServiceInventoryCache;
 import org.apache.skywalking.oap.server.core.query.entity.Order;
 import org.apache.skywalking.oap.server.custommodule.ServerCustomModule;
+import org.apache.skywalking.oap.server.custommodule.prometheus.exporter.jvm.cache.InventoryCache;
 import org.apache.skywalking.oap.server.custommodule.storage.mysql.query.entity.CustomEndPointBrief;
 import org.apache.skywalking.oap.server.custommodule.storage.query.IQueryCustomModuleDao;
 import org.apache.skywalking.oap.server.custommodule.storage.query.PageInfo;
@@ -57,6 +58,8 @@ public class CustomQueryApisJettyHandler extends JettyJsonHandler {
 //        this.serviceInstanceInventoryCache = moduleManager.find(CoreModule.NAME).provider().getService(ServiceInstanceInventoryCache.class);
         this.serviceInventoryCache = moduleManager.find(CoreModule.NAME).provider().getService(ServiceInventoryCache.class);
         this.endpointInventoryCache = moduleManager.find(CoreModule.NAME).provider().getService(EndpointInventoryCache.class);
+        InventoryCache.ENDPOINT_INVENTORY_CACHE = endpointInventoryCache;
+        InventoryCache.SERVICE_INVENTORY_CACHE = serviceInventoryCache;
     }
 
     @Override
@@ -102,7 +105,7 @@ public class CustomQueryApisJettyHandler extends JettyJsonHandler {
 
     private JsonElement queryEndPointAggregation(Map<String, Object> variables) throws IOException {
         IQueryCustomModuleDao queryCustomModuleDao = moduleManager.find(ServerCustomModule.NAME).provider().getService(IQueryCustomModuleDao.class);
-        int serviceId =  ((Number)variables.getOrDefault("serviceId", Const.USER_SERVICE_ID)).intValue();
+        int serviceId = ((Number) variables.getOrDefault("serviceId", Const.USER_SERVICE_ID)).intValue();
         int endPointId = ((Number) variables.getOrDefault("endPointId", Const.USER_ENDPOINT_ID)).intValue();
         int pageNum = ((Number) variables.getOrDefault("pageNum", 1)).intValue();
         int pageSize = ((Number) variables.getOrDefault("pageSize", 10)).intValue();
