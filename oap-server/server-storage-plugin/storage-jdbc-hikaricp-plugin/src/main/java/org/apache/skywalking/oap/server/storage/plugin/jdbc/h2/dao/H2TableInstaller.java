@@ -79,6 +79,7 @@ public class H2TableInstaller extends ModelInstaller {
         }
         //解决索引过长数据库不支持的问题 5.7及以后版本不用 参考地址：https://www.cnblogs.com/kerrycode/p/9680881.html
 //        1： 系统变量innodb_large_prefix为ON
+//        show variables like '%innodb_large_prefix%';
 //            set global innodb_large_prefix=on;
 //        2： 系统变量innodb_file_format为Barracuda
 //             set global innodb_file_format=Barracuda;
