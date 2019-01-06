@@ -6,6 +6,7 @@ import org.apache.skywalking.oap.server.core.storage.IStorageClientService;
 import org.apache.skywalking.oap.server.core.storage.StorageModule;
 import org.apache.skywalking.oap.server.custommodule.apis.CustomQueryApisJettyHandler;
 import org.apache.skywalking.oap.server.custommodule.apis.ExporterJettyHandler;
+import org.apache.skywalking.oap.server.custommodule.prometheus.exporter.ExportMetricTimmer;
 import org.apache.skywalking.oap.server.custommodule.storage.mysql.query.QueryCustomModuleDaoImpl;
 import org.apache.skywalking.oap.server.custommodule.storage.query.IQueryCustomModuleDao;
 import org.apache.skywalking.oap.server.library.client.Client;
@@ -25,7 +26,6 @@ public class CustomModuleProvider extends ModuleProvider {
     }
 
     private ExporterJettyHandler exporterJettyHandler;
-    private CustomQueryApisJettyHandler customQueryApisJettyHandler;
 
     @Override
     public Class<? extends ModuleDefine> module() {
@@ -46,7 +46,7 @@ public class CustomModuleProvider extends ModuleProvider {
     public void start() throws ServiceNotProvidedException, ModuleStartException {
         JettyHandlerRegister jettyHandlerRegister = getManager().find(CoreModule.NAME).provider().getService(JettyHandlerRegister.class);
         jettyHandlerRegister.addHandler(exporterJettyHandler);
-        customQueryApisJettyHandler = new CustomQueryApisJettyHandler(getManager());
+        CustomQueryApisJettyHandler customQueryApisJettyHandler = new CustomQueryApisJettyHandler(getManager());
         jettyHandlerRegister.addHandler(customQueryApisJettyHandler);
         ModuleProvider moduleProvider = (ModuleProvider) (getManager().find(StorageModule.NAME).provider());
         IQueryCustomModuleDao queryCustomModuleDao;
@@ -66,7 +66,7 @@ public class CustomModuleProvider extends ModuleProvider {
 
     @Override
     public void notifyAfterCompleted() throws ServiceNotProvidedException, ModuleStartException {
-
+        ExportMetricTimmer.INSTANCE.start(getManager());
     }
 
     @Override
