@@ -97,3 +97,5 @@ alarm:
   default:
 Prometheus-Exporter:
   default:
+telemetry:
+  none:
