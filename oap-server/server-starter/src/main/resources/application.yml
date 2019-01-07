@@ -110,3 +110,5 @@ alarm:
   default:
 ServerCustomModule:
   default:
+telemetry:
+  none:

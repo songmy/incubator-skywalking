@@ -41,6 +41,7 @@
         <module>generated-analysis</module>
         <module>generate-tool</module>
         <module>server-custom-module</module>
+        <module>server-telemetry</module>
     </modules>
 
     <properties>
