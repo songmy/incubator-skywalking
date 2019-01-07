@@ -50,16 +50,28 @@ public class CustomQueryApisJettyHandler extends JettyJsonHandler {
 
     private ModuleManager moduleManager;
     //    private final ServiceInstanceInventoryCache serviceInstanceInventoryCache;
-    private final ServiceInventoryCache serviceInventoryCache;
-    private final EndpointInventoryCache endpointInventoryCache;
+    private ServiceInventoryCache serviceInventoryCache;
+    private EndpointInventoryCache endpointInventoryCache;
 
     public CustomQueryApisJettyHandler(ModuleManager moduleManager) {
         this.moduleManager = moduleManager;
 //        this.serviceInstanceInventoryCache = moduleManager.find(CoreModule.NAME).provider().getService(ServiceInstanceInventoryCache.class);
-        this.serviceInventoryCache = moduleManager.find(CoreModule.NAME).provider().getService(ServiceInventoryCache.class);
-        this.endpointInventoryCache = moduleManager.find(CoreModule.NAME).provider().getService(EndpointInventoryCache.class);
         InventoryCache.ENDPOINT_INVENTORY_CACHE = endpointInventoryCache;
         InventoryCache.SERVICE_INVENTORY_CACHE = serviceInventoryCache;
+    }
+
+    public ServiceInventoryCache getServiceInventoryCache() {
+        if (serviceInventoryCache == null) {
+            this.serviceInventoryCache = moduleManager.find(CoreModule.NAME).provider().getService(ServiceInventoryCache.class);
+        }
+        return serviceInventoryCache;
+    }
+
+    public EndpointInventoryCache getEndpointInventoryCache() {
+        if (endpointInventoryCache == null) {
+            this.endpointInventoryCache = moduleManager.find(CoreModule.NAME).provider().getService(EndpointInventoryCache.class);
+        }
+        return endpointInventoryCache;
     }
 
     @Override

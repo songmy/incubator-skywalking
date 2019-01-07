@@ -18,6 +18,7 @@
 
 package org.apache.skywalking.oap.server.storage.plugin.jdbc.h2;
 
+import org.apache.skywalking.oap.server.core.CoreModule;
 import org.apache.skywalking.oap.server.core.storage.*;
 import org.apache.skywalking.oap.server.core.storage.cache.IEndpointInventoryCacheDAO;
 import org.apache.skywalking.oap.server.core.storage.cache.INetworkAddressInventoryCacheDAO;
@@ -114,6 +115,6 @@ public class H2StorageProvider extends ModuleProvider {
 
     @Override
     public String[] requiredModules() {
-        return new String[0];
+        return new String[]{CoreModule.NAME};
     }
 }

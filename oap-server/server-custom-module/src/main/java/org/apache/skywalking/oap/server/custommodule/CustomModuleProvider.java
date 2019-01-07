@@ -6,7 +6,7 @@ import org.apache.skywalking.oap.server.core.storage.IStorageClientService;
 import org.apache.skywalking.oap.server.core.storage.StorageModule;
 import org.apache.skywalking.oap.server.custommodule.apis.CustomQueryApisJettyHandler;
 import org.apache.skywalking.oap.server.custommodule.apis.ExporterJettyHandler;
-import org.apache.skywalking.oap.server.custommodule.prometheus.exporter.ExportMetricTimmer;
+import org.apache.skywalking.oap.server.custommodule.prometheus.exporter.ExportMetricCollector;
 import org.apache.skywalking.oap.server.custommodule.storage.mysql.query.QueryCustomModuleDaoImpl;
 import org.apache.skywalking.oap.server.custommodule.storage.query.IQueryCustomModuleDao;
 import org.apache.skywalking.oap.server.library.client.Client;
@@ -26,6 +26,7 @@ public class CustomModuleProvider extends ModuleProvider {
     }
 
     private ExporterJettyHandler exporterJettyHandler;
+    private CustomQueryApisJettyHandler customQueryApisJettyHandler;
 
     @Override
     public Class<? extends ModuleDefine> module() {
@@ -39,15 +40,16 @@ public class CustomModuleProvider extends ModuleProvider {
 
     @Override
     public void prepare() throws ServiceNotProvidedException, ModuleStartException {
-        exporterJettyHandler = new ExporterJettyHandler();
+        exporterJettyHandler = new ExporterJettyHandler(getManager());
+        customQueryApisJettyHandler = new CustomQueryApisJettyHandler(getManager());
     }
 
     @Override
     public void start() throws ServiceNotProvidedException, ModuleStartException {
         JettyHandlerRegister jettyHandlerRegister = getManager().find(CoreModule.NAME).provider().getService(JettyHandlerRegister.class);
         jettyHandlerRegister.addHandler(exporterJettyHandler);
-        CustomQueryApisJettyHandler customQueryApisJettyHandler = new CustomQueryApisJettyHandler(getManager());
         jettyHandlerRegister.addHandler(customQueryApisJettyHandler);
+
         ModuleProvider moduleProvider = (ModuleProvider) (getManager().find(StorageModule.NAME).provider());
         IQueryCustomModuleDao queryCustomModuleDao;
         String storageProviderName = moduleProvider.name();
@@ -61,12 +63,13 @@ public class CustomModuleProvider extends ModuleProvider {
         } else {
             throw new ServiceNotProvidedException("CUSTOM_MODULLE " + storageProviderName + " 自定义存储查询不支持");
         }
+
         this.registerServiceImplementation(IQueryCustomModuleDao.class, queryCustomModuleDao);
     }
 
     @Override
     public void notifyAfterCompleted() throws ServiceNotProvidedException, ModuleStartException {
-        ExportMetricTimmer.INSTANCE.start(getManager());
+        exporterJettyHandler.registryMetrics();
     }
 
     @Override
