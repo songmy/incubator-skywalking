@@ -119,12 +119,6 @@
         </dependency>
         <!-- storage module -->
 
-        <dependency>
-            <groupId>org.apache.skywalking</groupId>
-            <artifactId>server-prometheus</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
         <!-- queryBuild module -->
         <dependency>
             <groupId>org.apache.skywalking</groupId>
